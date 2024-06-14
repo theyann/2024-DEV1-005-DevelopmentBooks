@@ -37,4 +37,8 @@ kotlin {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+
+	testLogging {
+		events("PASSED", "SKIPPED", "FAILED")
+	}
 }
