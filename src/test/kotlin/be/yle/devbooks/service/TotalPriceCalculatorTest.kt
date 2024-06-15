@@ -18,20 +18,20 @@ class TotalPriceCalculatorTest {
         fun provideArgumentsForCalculateTotalPrice(): Stream<Arguments> {
             return Stream.of(
                 Arguments.of( // No Discount
-                    Basket(setOf()),
+                    Basket(mutableSetOf()),
                     0
                 ),
                 Arguments.of( // No Discount
-                    Basket(setOf(BasketItem(0, 1))),
+                    Basket(mutableSetOf(BasketItem(0, 1))),
                     50
                 ),
                 Arguments.of( // No Discount
-                    Basket(setOf(BasketItem(0, 2))),
+                    Basket(mutableSetOf(BasketItem(0, 2))),
                     100
                 ),
                 Arguments.of( // 5% Discount
                     Basket(
-                        setOf(
+                        mutableSetOf(
                             BasketItem(0, 1),
                             BasketItem(1, 1)
                         )
@@ -40,7 +40,7 @@ class TotalPriceCalculatorTest {
                 ),
                 Arguments.of( // 10% Discount
                     Basket(
-                        setOf(
+                        mutableSetOf(
                             BasketItem(0, 1),
                             BasketItem(1, 1),
                             BasketItem(2, 1)
@@ -50,7 +50,7 @@ class TotalPriceCalculatorTest {
                 ),
                 Arguments.of( // 20% Discount
                     Basket(
-                        setOf(
+                        mutableSetOf(
                             BasketItem(0, 1),
                             BasketItem(1, 1),
                             BasketItem(2, 1),
@@ -61,7 +61,7 @@ class TotalPriceCalculatorTest {
                 ),
                 Arguments.of( // 25% Discount
                     Basket(
-                        setOf(
+                        mutableSetOf(
                             BasketItem(0, 1),
                             BasketItem(1, 1),
                             BasketItem(2, 1),
@@ -91,7 +91,7 @@ class TotalPriceCalculatorTest {
     @Test
     fun `calculateTotalPrice 4 books of which 3 are different expect 10pct discount on 3 and 1 full price`() {
         val given = Basket(
-            setOf(
+            mutableSetOf(
                 BasketItem(0, 2),
                 BasketItem(1, 1),
                 BasketItem(2, 1),

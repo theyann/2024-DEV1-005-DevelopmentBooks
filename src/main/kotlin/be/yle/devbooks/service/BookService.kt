@@ -4,7 +4,9 @@ import be.yle.devbooks.data.BookRepository
 import org.springframework.stereotype.Service
 
 @Service
-class BookService(private val repo: BookRepository) {
+class BookService(
+    private val repo: BookRepository
+) {
 
     fun getAllBooks() = repo.findAll()
 
