@@ -1,10 +1,15 @@
 package be.yle.devbooks.service
 
+import be.yle.devbooks.data.DiscountRepository
 import be.yle.devbooks.model.Basket
+import be.yle.devbooks.utils.SeriesSplitter
 import org.springframework.stereotype.Service
 
 @Service
-class TotalPriceCalculator {
+class TotalPriceCalculator(
+    private val discountRepo: DiscountRepository,
+    private val splitter: SeriesSplitter
+) {
 
     /**
      * Discount Rules:
@@ -20,19 +25,19 @@ class TotalPriceCalculator {
      */
 
     fun calculateTotalPrice(basket: Basket): Double {
-        val ids = basket.items.map { it.bookId }
+        val series = splitter.splitToSeries(basket)
 
-        val discount = when (ids.size) {
-            2 -> .05
-            3 -> .10
-            4 -> .20
-            5 -> .25
-            else -> .0
+        var totalPrice = 0.0
+
+        series.forEach {
+            val discount = discountRepo.findDiscountForSeries(it)
+
+            val totalBookCount = it.size
+            val totalWithoutDiscount = totalBookCount * SINGLE_BOOK_PRICE
+            totalPrice += totalWithoutDiscount - (totalWithoutDiscount * discount)
         }
 
-        val totalBookCount = basket.items.sumOf { it.count }
-        val totalWithoutDiscount = totalBookCount * SINGLE_BOOK_PRICE
-        return totalWithoutDiscount - (totalWithoutDiscount * discount)
+        return totalPrice
     }
 
     companion object {

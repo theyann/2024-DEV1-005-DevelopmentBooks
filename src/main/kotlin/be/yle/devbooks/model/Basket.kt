@@ -6,6 +6,6 @@ data class BasketItem(
 )
 
 data class Basket(
-    val items: List<BasketItem>
+    val items: Set<BasketItem>
 )
 
