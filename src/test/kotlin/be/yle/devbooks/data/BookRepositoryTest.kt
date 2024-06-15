@@ -23,7 +23,7 @@ class BookRepositoryTest {
 
     @Test
     fun findById_with_existing_id_expect_one_book() {
-        val actual = repo.findById(1)
+        val actual = repo.findById(0)
 
         actual shouldBe BookRepository.ALL_BOOKS[0]
     }
