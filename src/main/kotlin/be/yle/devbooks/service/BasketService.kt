@@ -3,6 +3,7 @@ package be.yle.devbooks.service
 import be.yle.devbooks.data.BasketRepository
 import be.yle.devbooks.model.Basket
 import be.yle.devbooks.model.BasketItem
+import be.yle.devbooks.model.BasketValidation
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,4 +25,10 @@ class BasketService(
         repo.save(basket)
     }
 
+    fun finalizeCurrentBasket(): BasketValidation {
+        val basket = repo.getBasket() ?:return BasketValidation(Basket(), 0.0)
+
+        val totalPrice = calculator.calculateTotalPrice(basket)
+        return BasketValidation(basket, totalPrice)
+    }
 }

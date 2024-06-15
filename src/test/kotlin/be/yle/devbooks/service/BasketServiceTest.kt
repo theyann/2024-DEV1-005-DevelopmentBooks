@@ -1,8 +1,11 @@
 package be.yle.devbooks.service
 
 import be.yle.devbooks.data.BasketRepository
+import be.yle.devbooks.data.DiscountRepository
 import be.yle.devbooks.model.Basket
 import be.yle.devbooks.model.BasketItem
+import be.yle.devbooks.model.BasketValidation
+import be.yle.devbooks.utils.SeriesSplitter
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -14,7 +17,7 @@ class BasketServiceTest {
 
     @BeforeEach
     fun setup() {
-        service = BasketService(BasketRepository())
+        service = BasketService(BasketRepository(), TotalPriceCalculator(DiscountRepository(), SeriesSplitter()))
     }
 
     @AfterEach
@@ -56,4 +59,15 @@ class BasketServiceTest {
         BasketRepository.CURRENT_BASKET!!.items shouldBe expected.items
     }
 
+    @Test
+    fun `finalizeCurrentBasket with existing basket, expects basket and total price`() {
+        BasketRepository.CURRENT_BASKET = Basket(mutableSetOf(BasketItem(0, 1), BasketItem(1, 2)))
+
+        val expected = BasketValidation(
+            Basket(mutableSetOf(BasketItem(0, 1), BasketItem(1, 2))),
+            145.0
+        )
+
+        service.finalizeCurrentBasket() shouldBe expected
+    }
 }
