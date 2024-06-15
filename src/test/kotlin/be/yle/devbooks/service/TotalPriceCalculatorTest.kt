@@ -3,9 +3,6 @@ package be.yle.devbooks.service
 import be.yle.devbooks.model.Basket
 import be.yle.devbooks.model.BasketItem
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -17,8 +14,52 @@ class TotalPriceCalculatorTest {
         @JvmStatic
         fun provideArgumentsForCalculateTotalPrice(): Stream<Arguments> {
             return Stream.of(
-                Arguments.of(Basket(listOf()), 0),
-                Arguments.of(Basket(listOf(BasketItem(0, 1))), 50)
+                Arguments.of( // No Discount
+                    Basket(listOf()),
+                    0
+                ),
+                Arguments.of( // No Discount
+                    Basket(listOf(BasketItem(0, 1))),
+                    50
+                ),
+                Arguments.of( // No Discount
+                    Basket(listOf(BasketItem(0, 2))),
+                    100
+                ),
+                Arguments.of( // 5% Discount
+                    Basket(listOf(
+                        BasketItem(0, 1),
+                        BasketItem(1, 1)
+                    )),
+                    95
+                ),
+                Arguments.of( // 10% Discount
+                    Basket(listOf(
+                        BasketItem(0, 1),
+                        BasketItem(1, 1),
+                        BasketItem(2, 1)
+                    )),
+                    135
+                ),
+                Arguments.of( // 20% Discount
+                    Basket(listOf(
+                        BasketItem(0, 1),
+                        BasketItem(1, 1),
+                        BasketItem(2, 1),
+                        BasketItem(3, 1)
+                    )),
+                    160
+                ),
+                Arguments.of( // 25% Discount
+                    Basket(listOf(
+                        BasketItem(0, 1),
+                        BasketItem(1, 1),
+                        BasketItem(2, 1),
+                        BasketItem(3, 1),
+                        BasketItem(4, 1)
+                    )),
+                    187.5
+                )
             )
         }
     }
@@ -32,7 +73,7 @@ class TotalPriceCalculatorTest {
 
     @ParameterizedTest
     @MethodSource("provideArgumentsForCalculateTotalPrice")
-    fun calculateTotalPrice(given: Basket, expected: Int) {
+    fun calculateTotalPriceTest(given: Basket, expected: Double) {
         calculator.calculateTotalPrice(given) shouldBe expected
     }
 }
