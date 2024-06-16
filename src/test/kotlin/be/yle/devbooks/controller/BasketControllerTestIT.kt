@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(BasketController::class)
-class BasketControllerTest {
+class BasketControllerTestIT {
     @TestConfiguration
     class TestConfig {
         @Bean

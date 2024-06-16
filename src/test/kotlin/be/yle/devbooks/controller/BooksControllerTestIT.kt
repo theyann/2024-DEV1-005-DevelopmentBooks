@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(BooksController::class)
-class BooksControllerTest {
+class BooksControllerTestIT {
 
     @TestConfiguration
     class TestConfig {

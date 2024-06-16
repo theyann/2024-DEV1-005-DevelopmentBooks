@@ -30,8 +30,7 @@ class BasketServiceTest {
     fun `addToBasket from empty basket, expects a basket with only the added item`() {
         val expected = Basket(mutableSetOf(BasketItem(0, 1)))
 
-        service.addToBasket(BasketItem(0, 1))
-
+        service.addToBasket(BasketItem(0, 1)) shouldBe true
         BasketRepository.CURRENT_BASKET shouldBe expected
     }
 
@@ -41,8 +40,7 @@ class BasketServiceTest {
 
         val expected = Basket(mutableSetOf(BasketItem(0, 1), BasketItem(1, 2), BasketItem(2, 1)))
 
-        service.addToBasket(BasketItem(2, 1))
-
+        service.addToBasket(BasketItem(2, 1)) shouldBe true
         BasketRepository.CURRENT_BASKET shouldBe expected
     }
 
@@ -52,11 +50,21 @@ class BasketServiceTest {
 
         val expected = Basket(mutableSetOf(BasketItem(0, 1), BasketItem(1, 4)))
 
-        service.addToBasket(BasketItem(1, 2))
+        service.addToBasket(BasketItem(1, 2)) shouldBe true
 
         // not sure why in this case if I test CURRENT_BASKET with expected directly, even though the values are the same, the test fails
         // because probably checking also for references. I don't really have enough time to find a better solution at this time.
         // So for now, I check the items directly instead.
+        BasketRepository.CURRENT_BASKET!!.items shouldBe expected.items
+    }
+
+    @Test
+    fun `addToBasket non existing book, expects false`() {
+        BasketRepository.CURRENT_BASKET = Basket(mutableSetOf(BasketItem(0, 1), BasketItem(1, 2)))
+
+        val expected = BasketRepository.CURRENT_BASKET!!.copy()
+
+        service.addToBasket(BasketItem(9, 2)) shouldBe false
         BasketRepository.CURRENT_BASKET!!.items shouldBe expected.items
     }
 
@@ -68,6 +76,14 @@ class BasketServiceTest {
             Basket(mutableSetOf(BasketItem(0, 1), BasketItem(1, 2))),
             145.0
         )
+
+        service.finalizeCurrentBasket() shouldBe expected
+        BasketRepository.CURRENT_BASKET shouldBe null
+    }
+
+    @Test
+    fun `finalizeCurrentBasket with no basket, expects default response of empty basket and total price 0`() {
+        val expected = BasketValidation(Basket(),0.0)
 
         service.finalizeCurrentBasket() shouldBe expected
         BasketRepository.CURRENT_BASKET shouldBe null
