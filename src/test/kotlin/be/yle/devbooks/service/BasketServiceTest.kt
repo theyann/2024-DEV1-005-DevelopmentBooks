@@ -60,7 +60,7 @@ class BasketServiceTest {
     }
 
     @Test
-    fun `finalizeCurrentBasket with existing basket, expects basket and total price`() {
+    fun `finalizeCurrentBasket with existing basket, expects basket and total price and basket deleted from db`() {
         BasketRepository.CURRENT_BASKET = Basket(mutableSetOf(BasketItem(0, 1), BasketItem(1, 2)))
 
         val expected = BasketValidation(
@@ -69,5 +69,6 @@ class BasketServiceTest {
         )
 
         service.finalizeCurrentBasket() shouldBe expected
+        BasketRepository.CURRENT_BASKET shouldBe null
     }
 }

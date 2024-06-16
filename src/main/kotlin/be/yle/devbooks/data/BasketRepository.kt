@@ -12,6 +12,10 @@ class BasketRepository {
 
     fun getBasket(): Basket? = CURRENT_BASKET
 
+    fun deleteBasket() {
+        CURRENT_BASKET = null
+    }
+
     companion object {
         var CURRENT_BASKET: Basket? = null
     }

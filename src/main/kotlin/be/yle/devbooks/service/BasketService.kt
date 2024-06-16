@@ -27,6 +27,7 @@ class BasketService(
 
     fun finalizeCurrentBasket(): BasketValidation {
         val basket = repo.getBasket() ?:return BasketValidation(Basket(), 0.0)
+        repo.deleteBasket()
 
         val totalPrice = calculator.calculateTotalPrice(basket)
         return BasketValidation(basket, totalPrice)

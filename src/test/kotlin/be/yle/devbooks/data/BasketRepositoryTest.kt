@@ -42,4 +42,13 @@ class BasketRepositoryTest {
 
         repo.getBasket() shouldBe given
     }
+
+    @Test
+    fun `deleteBasket expects basket to be null`() {
+        BasketRepository.CURRENT_BASKET = Basket(mutableSetOf(BasketItem(0, 2), BasketItem(1, 1)))
+
+        repo.deleteBasket()
+
+        repo.getBasket() shouldBe null
+    }
 }
