@@ -7,9 +7,7 @@ import be.yle.devbooks.service.BasketService
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -44,10 +42,10 @@ class BasketControllerTest {
     }
 
     @Test
-    fun `addToBasket, expects accepted`() {
+    fun `addToBasket successful, expects accepted`() {
         val given = BasketItem(0, 1)
 
-        every { service.addToBasket(given) } just runs
+        every { service.addToBasket(given) } returns true
 
         mockMvc.perform(
             post("/basket")
@@ -56,6 +54,21 @@ class BasketControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isAccepted)
     }
+
+    @Test
+    fun `addToBasket failed, expects bad request`() {
+        val given = BasketItem(0, 1)
+
+        every { service.addToBasket(given) } returns false
+
+        mockMvc.perform(
+            post("/basket")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(given.toJson())
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest)
+    }
+
 
     @Test
     fun `finalizeBasket, expects json response`() {

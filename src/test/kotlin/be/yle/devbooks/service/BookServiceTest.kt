@@ -7,6 +7,8 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class BookServiceTest {
 
@@ -42,5 +44,13 @@ class BookServiceTest {
         every { repo.findById(0) } returns null
 
         service.getBookById(0) shouldBe null
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `bookIsAvailable expects parameter`(expected: Boolean) {
+        every { repo.isAvailable(0) } returns expected
+
+        service.bookIsAvailable(0) shouldBe expected
     }
 }

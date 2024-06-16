@@ -16,8 +16,8 @@ class BasketController(
 
     @PostMapping("/basket")
     fun addToBasket(@RequestBody input: BasketItem): ResponseEntity<Void> {
-        service.addToBasket(input)
-        return ResponseEntity.accepted().build()
+        val result = service.addToBasket(input)
+        return if (result) ResponseEntity.accepted().build() else ResponseEntity.badRequest().build()
     }
 
     @GetMapping("/basket/finalize")

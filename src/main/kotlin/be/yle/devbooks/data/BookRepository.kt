@@ -11,6 +11,8 @@ class BookRepository {
         return ALL_BOOKS.find { it.id == id }
     }
 
+    fun isAvailable(id: Int): Boolean = findById(id) != null
+
     companion object {
         val ALL_BOOKS = listOf(
             Book(0, "Clean Code", "Robert Martin", 2008),

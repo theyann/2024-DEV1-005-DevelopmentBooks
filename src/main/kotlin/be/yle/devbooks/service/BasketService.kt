@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service
 
 @Service
 class BasketService(
-    private val repo: BasketRepository,
+    private val basketRepo: BasketRepository,
+    private val bookService: BookService,
     private val calculator: TotalPriceCalculator
 ) {
 
-    fun addToBasket(input: BasketItem) {
-        val basket = repo.getBasket() ?: Basket()
+    fun addToBasket(input: BasketItem): Boolean {
+        if (!bookService.bookIsAvailable(input.bookId)) return false
+
+        val basket = basketRepo.getBasket() ?: Basket()
 
         val item = basket.items.find { it.bookId == input.bookId }
         if (item == null) {
@@ -22,12 +25,14 @@ class BasketService(
             item.count += input.count
         }
 
-        repo.save(basket)
+        basketRepo.save(basket)
+
+        return true
     }
 
     fun finalizeCurrentBasket(): BasketValidation {
-        val basket = repo.getBasket() ?:return BasketValidation(Basket(), 0.0)
-        repo.deleteBasket()
+        val basket = basketRepo.getBasket() ?:return BasketValidation(Basket(), 0.0)
+        basketRepo.deleteBasket()
 
         val totalPrice = calculator.calculateTotalPrice(basket)
         return BasketValidation(basket, totalPrice)

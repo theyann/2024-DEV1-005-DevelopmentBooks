@@ -1,6 +1,7 @@
 package be.yle.devbooks.service
 
 import be.yle.devbooks.data.BasketRepository
+import be.yle.devbooks.data.BookRepository
 import be.yle.devbooks.data.DiscountRepository
 import be.yle.devbooks.model.Basket
 import be.yle.devbooks.model.BasketItem
@@ -17,7 +18,7 @@ class BasketServiceTest {
 
     @BeforeEach
     fun setup() {
-        service = BasketService(BasketRepository(), TotalPriceCalculator(DiscountRepository(), SeriesSplitter()))
+        service = BasketService(BasketRepository(), BookService(BookRepository()), TotalPriceCalculator(DiscountRepository(), SeriesSplitter()))
     }
 
     @AfterEach

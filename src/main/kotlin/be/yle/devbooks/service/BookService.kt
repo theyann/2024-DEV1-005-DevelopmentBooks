@@ -12,4 +12,5 @@ class BookService(
 
     fun getBookById(id: Int) = repo.findById(id)
 
+    fun bookIsAvailable(id: Int) = repo.isAvailable(id)
 }
