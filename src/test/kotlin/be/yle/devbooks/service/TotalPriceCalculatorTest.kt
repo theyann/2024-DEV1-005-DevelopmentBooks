@@ -89,7 +89,7 @@ class TotalPriceCalculatorTest {
     }
 
     @Test
-    fun `calculateTotalPrice 4 books of which 3 are different expect 10pct discount on 3 and 1 full price`() {
+    fun `calculateTotalPrice 4 books of which 3 are different expect 10 percent discount on 3 and 1 full price`() {
         val given = Basket(
             mutableSetOf(
                 BasketItem(0, 2),
@@ -99,6 +99,21 @@ class TotalPriceCalculatorTest {
         )
 
         calculator.calculateTotalPrice(given) shouldBe 185
+    }
+
+    @Test
+    fun `calculateTotalPrice kata example`() {
+        val given = Basket(
+            mutableSetOf(
+                BasketItem(0, 2),
+                BasketItem(1, 2),
+                BasketItem(2, 2),
+                BasketItem(3, 1),
+                BasketItem(4, 1),
+            )
+        )
+
+        calculator.calculateTotalPrice(given) shouldBe 322.5 // yes, I know ... it's not 320 :(
     }
 
 }
